@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>猜樂透</title>
+		<link rel="stylesheet" href="mystyle.css">
+	</head>
+	<body>
+		<!--(1)設計遊戲-->
+		<h3>請輸入三個數字並按下按鈕開獎</h3>
+		<h2>(1-10不重複)</h2>
+		<input id="guessnum1" type="number" value="數字1" size="24">
+		<input id="guessnum2" type="number" value="數字2" size="24">
+		<input id="guessnum3" type="number" value="數字3" size="24">
+		<button onclick="myFunction()">開獎</button>
+		<!--(4)重新開始紐-->
+		<button onclick="reload()">reset</button>
+		<br>
+		<p id="demo"></p>
+		
+		<script>
+			const luckynum1 = getNum(1);
+			const luckynum2 = getNum(2);
+			const luckynum3 = getNum(3);
+			let success = false;
+			
+			function reload(){
+				window.location.reload();
+			}
+			
+			//(1)產生亂數
+			function getRandom(){
+				return Math.floor(Math.random()*10)+1;
+			}
+			
+			//(1)取得三個得獎號碼
+			function getNum(x){
+				let lotterynum = [];
+				for(i=0; i<=x; i++){
+					n = getRandom();
+					if(lotterynum.indexOf(n)>0){
+						i-=1;
+						continue;
+					}else{
+						lotterynum[x] = n;
+					}
+				}
+				return lotterynum[x];
+			}
+			
+			function rewardType(){
+				//(2)不同金額的中獎提示
+				let count = 0;
+				let success = false;
+				let input1 = document.getElementById("guessnum1").value;
+				let input2 = document.getElementById("guessnum2").value;
+				let input3 = document.getElementById("guessnum3").value;
+				
+				if((input1 == luckynum1)||(input1 == luckynum2)||(input1 == luckynum3)){
+					count++;
+					success = true;
+				}
+				if((input2 == luckynum1)||(input2 == luckynum2)||(input2 == luckynum3)){
+					count++;
+					success = true;
+				}
+				if((input3 == luckynum1)||(input3 == luckynum2)||(input3 == luckynum3)){
+					count++;
+					success = true;
+				}
+				return count;
+			}
+			
+			function myFunction(){
+				let text = '';
+				rewardType();
+				
+				if (rewardType()!=0){
+					onload = showmsg();
+					function showmsg(){
+						alert('恭喜中獎！猜猜你是什麼獎');
+					}
+					if(rewardType() === 1){
+						text = '恭喜獲得參獎，獎金500塊';
+					}
+					else if(rewardType() === 2){
+						text = '恭喜獲得貳獎，獎金1000塊';
+					}
+					else if(rewardType() === 3){
+						text = '恭喜獲得頭獎，獎金5000塊';
+					}
+				}
+						
+				else {
+					onload = showmsg();
+					function showmsg(){
+						alert('可惜沒中獎, 再接再厲');
+					}
+				}
+				
+				text += '  點按reset鍵重新挑戰抽數字';
+				document.getElementById("demo").innerHTML = text;
+			}
+		</script>
+	</body>
+</html>
